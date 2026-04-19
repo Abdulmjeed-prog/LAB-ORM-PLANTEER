@@ -1,0 +1,158 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %}Home | Planteer{% endblock %}
+
+{% block content %}
+
+<section class="hero-clean">
+    <div class="container">
+        <div class="hero-panel">
+            <div class="row align-items-center g-0">
+                <div class="col-lg-6">
+                    <div class="hero-copy">
+                        <span class="eyebrow">Discover plants with ease</span>
+                        <h1>Build your own calm little world of plants.</h1>
+                        <p>
+                            Explore beautiful plant profiles, search by name or use, and keep growing your collection with a cleaner and more thoughtful experience.
+                        </p>
+
+                        <form action="{% url 'plants:search_plant' %}" method="get" class="search-bar-modern mb-4">
+                            <input
+                                type="text"
+                                name="q"
+                                class="form-control"
+                                placeholder="Search for aloe vera, mint, cactus..."
+                            >
+                            <button class="btn btn-brand" type="submit">Search</button>
+                        </form>
+
+                        <div class="hero-actions">
+                            <a href="{% url 'plants:all_plants_view' %}" class="btn btn-brand">Browse All Plants</a>
+                            <a href="{% url 'plants:add_plant' %}" class="btn btn-outline-soft">Add a New Plant</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="hero-image-wrap">
+                        <img
+                            src="{% static 'images/Types-Of-Plants-In-English-For-Preschoolers-And-Kids.jpg' %}"
+                            alt="Green houseplants arranged indoors"
+                            class="hero-image"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding pt-0">
+    <div class="container">
+        <div class="section-heading">
+            <span class="eyebrow">Featured collection</span>
+            <h2>Plants worth exploring</h2>
+            <p>
+                Start with a few highlighted plants from your collection and jump into their details, category, and uses.
+            </p>
+        </div>
+
+        {% if plants %}
+            <div class="row g-4">
+                {% for plant in plants %}
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <article class="plant-card">
+                            {% if plant.image %}
+                                <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+                            {% else %}
+                                <img
+                                    src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=1200&q=80"
+                                    alt="Plant placeholder"
+                                >
+                            {% endif %}
+
+                            <div class="plant-card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                                    <span class="badge-soft">{{ plant.get_category_display }}</span>
+
+                                    {% if plant.is_edible %}
+                                        <span class="badge-soft">Edible</span>
+                                    {% else %}
+                                        <span class="badge-soft">Not edible</span>
+                                    {% endif %}
+                                </div>
+
+                                <h3 class="plant-card-title">{{ plant.name }}</h3>
+
+                                <p class="plant-card-text">
+                                    {{ plant.about|truncatewords:18 }}
+                                </p>
+
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="{% url 'plants:details_view' plant.id %}" class="btn btn-brand">View Details</a>
+                                    <a href="{% url 'plants:update_plant' plant.id %}" class="btn btn-outline-soft">Edit</a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="{% url 'plants:all_plants_view' %}" class="btn btn-outline-soft">
+                    View Full Plant Collection
+                </a>
+            </div>
+        {% else %}
+            <div class="page-card text-center">
+                <span class="eyebrow mb-3 d-inline-block">Nothing here yet</span>
+                <h3 class="display-font mb-3">Your collection is ready to begin</h3>
+                <p class="text-muted mb-4">
+                    Add your first plant and start building a more beautiful collection inside Planteer.
+                </p>
+                <a href="{% url 'plants:add_plant' %}" class="btn btn-brand">Add First Plant</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section-padding pt-0">
+    <div class="container">
+        <div class="page-shell">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-5">
+                    <span class="eyebrow">Why Planteer</span>
+                    <h2 class="display-font mb-3">Simple, useful, and made for plant lovers.</h2>
+                    <p class="text-muted mb-0">
+                        Search faster, organize better, and keep each plant profile clear with image, category, uses, and edible status in one place.
+                    </p>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="page-card h-100">
+                                <h4 class="mb-2">Search</h4>
+                                <p class="text-muted mb-0">Find plants quickly by name, use, or description.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="page-card h-100">
+                                <h4 class="mb-2">Manage</h4>
+                                <p class="text-muted mb-0">Add and update plant details in a clean interface.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="page-card h-100">
+                                <h4 class="mb-2">Explore</h4>
+                                <p class="text-muted mb-0">Browse your collection with a more polished visual style.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

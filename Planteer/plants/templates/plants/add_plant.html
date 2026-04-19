@@ -1,0 +1,125 @@
+{% extends "main/base.html" %}
+
+{% block title %}Add Plant | Planteer{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold text-success">Add New Plant</h2>
+                        <p class="text-muted mb-0">Fill in the details below to add a new plant to Planteer.</p>
+                    </div>
+
+                    <form action="{% url 'plants:add_plant' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% if plant_form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in plant_form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label fw-semibold">Plant Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                class="form-control {% if plant_form.name.errors %}is-invalid{% endif %}"
+                                placeholder="Enter plant name"
+                                value="{% if plant_form.is_bound %}{{ plant_form.name.value|default:'' }}{% endif %}"
+                                required
+                                minlength="3"
+                                maxlength="50"
+                            >
+                            {% for error in plant_form.name.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="about" class="form-label fw-semibold">About</label>
+                            <textarea
+                                name="about"
+                                id="about"
+                                rows="4"
+                                class="form-control {% if plant_form.about.errors %}is-invalid{% endif %}"
+                                placeholder="Write a short description about the plant"
+                                required
+                                minlength="10"
+                                maxlength="1024"
+                            >{% if plant_form.is_bound %}{{ plant_form.about.value|default:'' }}{% endif %}</textarea>
+                            {% for error in plant_form.about.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="used_for" class="form-label fw-semibold">Used For</label>
+                            <input
+                                type="text"
+                                name="used_for"
+                                id="used_for"
+                                class="form-control {% if plant_form.used_for.errors %}is-invalid{% endif %}"
+                                placeholder="Example: Tea, decoration, medicine"
+                                value="{% if plant_form.is_bound %}{{ plant_form.used_for.value|default:'' }}{% endif %}"
+                                required
+                                minlength="5"
+                                maxlength="255"
+                            >
+                            {% for error in plant_form.used_for.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="image" class="form-label fw-semibold">Plant Image</label>
+                            <input
+                                type="file"
+                                name="image"
+                                id="image"
+                                class="form-control {% if plant_form.image.errors %}is-invalid{% endif %}"
+                                required
+                                accept="image/*"
+                            >
+                            {% for error in plant_form.image.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="category" class="form-label fw-semibold">Category</label>
+                                <select name="category" id="category" class="form-select">
+                                    {% for val, label in categories %}
+                                        <option value="{{ val }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="is_edible" class="form-label fw-semibold">Is Edible?</label>
+                                <select name="is_edible" id="is_edible" class="form-select">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-green btn-lg">Add Plant</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

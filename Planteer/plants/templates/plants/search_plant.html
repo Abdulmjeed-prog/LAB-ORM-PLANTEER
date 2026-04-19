@@ -1,0 +1,100 @@
+{% extends "main/base.html" %}
+
+{% block title %}Search Plants | Planteer{% endblock %}
+
+{% block content %}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="page-card search-page-card">
+            <div class="section-heading mb-4">
+                <span class="eyebrow">Plant finder</span>
+                <h2>Search Plants</h2>
+                <p>
+                    Find plants by name, description, or what they are used for.
+                </p>
+            </div>
+
+            <form method="get" action="{% url 'plants:search_plant' %}" class="search-form-wrap mb-4">
+                <div class="search-bar-modern">
+                    <input
+                        type="text"
+                        name="q"
+                        class="form-control"
+                        placeholder="Search by plant name, description, or use..."
+                        value="{{ query }}"
+                    >
+                    <button type="submit" class="btn btn-brand">
+                        Search
+                    </button>
+                </div>
+            </form>
+
+            {% if query %}
+                <div class="search-results-head">
+                    <p class="mb-0">
+                        Results for <strong>"{{ query }}"</strong>
+                    </p>
+
+                    {% if plants %}
+                        <span class="badge-soft">
+                            {{ plants|length }} result{{ plants|length|pluralize }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                {% if plants %}
+                    <div class="row g-4 mt-1">
+                        {% for plant in plants %}
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <article class="plant-card plant-search-card h-100">
+                                    {% if plant.image %}
+                                        <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+                                    {% else %}
+                                        <img
+                                            src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=1200&q=80"
+                                            alt="Plant placeholder"
+                                        >
+                                    {% endif %}
+
+                                    <div class="plant-card-body plant-search-card-body">
+                                        <span class="badge-soft mb-3">{{ plant.get_category_display }}</span>
+
+                                        <h3 class="plant-card-title mb-2">{{ plant.name }}</h3>
+
+                                        <p class="plant-card-text mb-4">
+                                            {{ plant.about|truncatewords:18 }}
+                                        </p>
+
+                                        <a href="{% url 'plants:details_view' plant.id %}" class="btn btn-brand w-100 mt-auto">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="search-empty-state">
+                        <div class="search-empty-icon">🌿</div>
+                        <h3>No plants found</h3>
+                        <p>
+                            We could not find any plants matching <strong>"{{ query }}"</strong>.
+                            Try another keyword like basil, aloe, mint, or lavender.
+                        </p>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="search-empty-state search-empty-state-soft">
+                    <div class="search-empty-icon">🔎</div>
+                    <h3>Start searching</h3>
+                    <p>
+                        Enter a plant name, category, or use to explore your collection.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

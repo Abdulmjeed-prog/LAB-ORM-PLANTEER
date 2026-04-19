@@ -1,0 +1,129 @@
+{% extends "main/base.html" %}
+
+{% block title %}All Plants | Planteer{% endblock %}
+
+{% block content %}
+
+<section class="section-padding pb-3">
+    <div class="container">
+        <div class="section-heading text-md-start mx-0 mb-4">
+            <span class="eyebrow">Plant directory</span>
+            <h1 class="mb-2">Browse all plants</h1>
+            <p class="mb-0">
+                Explore the full collection, filter by category, and quickly find edible or non-edible plants.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="pb-4">
+    <div class="container">
+        <div class="page-shell">
+            <form method="post" class="row g-3 align-items-end">
+                {% csrf_token %}
+
+                <div class="col-12 col-lg-5">
+                    <label for="category" class="form-label fw-semibold">Category</label>
+                    <select name="category" id="category" class="form-select">
+                        <option value="All Categories">All Categories</option>
+                        {% for category in categories %}
+                            <option value="{{ category }}" {% if request.POST.category == category %}selected{% endif %}>
+                                {{ category }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <label for="edible" class="form-label fw-semibold">Edible Status</label>
+                    <select name="edible" id="edible" class="form-select">
+                        <option value="">All Plants</option>
+                        <option value="yes" {% if request.POST.edible == "yes" %}selected{% endif %}>Edible</option>
+                        <option value="no" {% if request.POST.edible == "no" %}selected{% endif %}>Not edible</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-lg-3">
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button type="submit" class="btn btn-brand flex-grow-1">Apply Filters</button>
+                        <a href="{% url 'plants:all_plants_view' %}" class="btn btn-outline-soft flex-grow-1">Reset</a>
+                    </div>
+                </div>
+            </form>
+
+            {% if request.POST.category != "All Categories" or request.POST.edible %}
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    {% if request.POST.category and request.POST.category != "All Categories" %}
+                        <span class="badge-soft">Category: {{ request.POST.category }}</span>
+                    {% endif %}
+
+                    {% if request.POST.edible == "yes" %}
+                        <span class="badge-soft">Edible only</span>
+                    {% elif request.POST.edible == "no" %}
+                        <span class="badge-soft">Not edible only</span>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section-padding pt-2">
+    <div class="container">
+        {% if plants %}
+            <div class="row g-4">
+                {% for plant in plants %}
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <article class="plant-card">
+                            {% if plant.image %}
+                                <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+                            {% else %}
+                                <img
+                                    src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=1200&q=80"
+                                    alt="Plant placeholder"
+                                >
+                            {% endif %}
+
+                            <div class="plant-card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                                    <span class="badge-soft">{{ plant.get_category_display }}</span>
+
+                                    {% if plant.is_edible %}
+                                        <span class="badge-soft">Edible</span>
+                                    {% else %}
+                                        <span class="badge-soft">Not edible</span>
+                                    {% endif %}
+                                </div>
+
+                                <h3 class="plant-card-title">{{ plant.name }}</h3>
+
+                                <p class="plant-card-text">
+                                    {{ plant.about|truncatewords:18 }}
+                                </p>
+
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="{% url 'plants:details_view' plant.id %}" class="btn btn-brand">View Details</a>
+                                    <a href="{% url 'plants:update_plant' plant.id %}" class="btn btn-outline-soft">Edit</a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="page-card text-center">
+                <span class="eyebrow mb-3 d-inline-block">No matching plants</span>
+                <h3 class="display-font mb-3">Nothing matches your current filters</h3>
+                <p class="text-muted mb-4">
+                    Try changing the category, switching edible status, or reset the filters to explore the full collection again.
+                </p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a href="{% url 'plants:all_plants_view' %}" class="btn btn-brand">Reset Filters</a>
+                    <a href="{% url 'plants:add_plant' %}" class="btn btn-outline-soft">Add New Plant</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

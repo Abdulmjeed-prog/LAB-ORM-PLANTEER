@@ -1,0 +1,135 @@
+{% extends "main/base.html" %}
+
+{% block title %}{{ plant.name }} | Planteer{% endblock %}
+
+{% block content %}
+
+<section class="section-padding">
+    <div class="container">
+        <article class="plant-detail-shell">
+            <div class="plant-detail-hero">
+                {% if plant.image %}
+                    <img src="{{ plant.image.url }}" alt="{{ plant.name }}" class="plant-detail-hero-img">
+                {% else %}
+                    <img
+                        src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=1400&q=80"
+                        alt="Plant placeholder"
+                        class="plant-detail-hero-img"
+                    >
+                {% endif %}
+            </div>
+
+            <div class="plant-detail-content">
+                <div class="plant-detail-top">
+                    <span class="badge-soft">{{ plant.get_category_display }}</span>
+
+                    {% if plant.is_edible %}
+                        <span class="badge-soft">Edible</span>
+                    {% else %}
+                        <span class="badge-soft">Not edible</span>
+                    {% endif %}
+                </div>
+
+                <h1 class="plant-detail-title">{{ plant.name }}</h1>
+
+                <p class="plant-detail-date text-muted">
+                    Added {{ plant.create_at|date:"d M Y" }}
+                </p>
+
+                <div class="plant-detail-info-grid">
+                    <div class="plant-detail-info-item">
+                        <span class="plant-detail-info-label">Category</span>
+                        <p>{{ plant.get_category_display }}</p>
+                    </div>
+
+                    <div class="plant-detail-info-item">
+                        <span class="plant-detail-info-label">Edibility</span>
+                        <p>
+                            {% if plant.is_edible %}
+                                Yes
+                            {% else %}
+                                No
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="plant-detail-section">
+                    <h3>About</h3>
+                    <p>{{ plant.about }}</p>
+                </div>
+
+                <div class="plant-detail-section">
+                    <h3>Uses</h3>
+                    <p>{{ plant.used_for }}</p>
+                </div>
+
+                <div class="plant-detail-actions">
+                    <a href="{% url 'plants:all_plants_view' %}" class="btn btn-outline-soft">
+                        All Plants
+                    </a>
+                    <a href="{% url 'plants:update_plant' plant.id %}" class="btn btn-brand">
+                        Edit Plant
+                    </a>
+                    <a href="{% url 'plants:delete_plant' plant.id %}" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                        Delete Plant
+                    </a>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+{% if recom_plants %}
+<section class="section-padding pt-0">
+    <div class="container">
+        <div class="section-heading">
+            <span class="eyebrow">Explore more</span>
+            <h2>Related Plants</h2>
+            <p>Discover similar plants from your collection.</p>
+        </div>
+
+            <div class="row g-4">
+                {% for recom_plant in recom_plants %}
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <article class="plant-card">
+                            {% if recom_plant.image %}
+                                <img src="{{ recom_plant.image.url }}" alt="{{ recom_plant.name }}">
+                            {% else %}
+                                <img
+                                    src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=1200&q=80"
+                                    alt="Plant placeholder"
+                                >
+                            {% endif %}
+
+                            <div class="plant-card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                                    <span class="badge-soft">{{ plant.get_category_display }}</span>
+
+                                    {% if recom_plant.is_edible %}
+                                        <span class="badge-soft">Edible</span>
+                                    {% else %}
+                                        <span class="badge-soft">Not edible</span>
+                                    {% endif %}
+                                </div>
+
+                                <h3 class="plant-card-title">{{ recom_plant.name }}</h3>
+
+                                <p class="plant-card-text">
+                                    {{ recom_plant.about|truncatewords:18 }}
+                                </p>
+
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="{% url 'plants:details_view' plant.id %}" class="btn btn-brand">View Details</a>
+                                    <a href="{% url 'plants:update_plant' plant.id %}" class="btn btn-outline-soft">Edit</a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends "main/base.html" %}
+
+{% block title %}Contact | Planteer{% endblock %}
+
+{% block content %}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="section-heading mb-5">
+            <span class="eyebrow">Get in touch</span>
+            <h1>Contact Planteer</h1>
+            <p>
+                Have a question, suggestion, or just want to say hello? Send a message and we’ll get back to you as soon as we can.
+            </p>
+        </div>
+
+        <div class="contact-layout">
+            <div class="contact-info-card">
+                <h2 class="display-font mb-3">Let’s talk plants.</h2>
+                <p class="text-muted mb-4">
+                    Whether you want to share feedback, report an issue, or ask about a plant, this form is the best way to reach us.
+                </p>
+
+                <div class="contact-info-list">
+                    <div class="contact-info-item">
+                        <span class="contact-label">Response time</span>
+                        <p>Usually within 1–2 business days</p>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <span class="contact-label">Best for</span>
+                        <p>Questions, feedback, suggestions, or support</p>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <span class="contact-label">Friendly tip</span>
+                        <p>Please include enough detail in your message so we can help you faster.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-card">
+                <form method="post" action="">
+                    {% csrf_token %}
+
+                    {% if contact_form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in contact_form.non_field_errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label for="first_name" class="form-label fw-semibold">First name</label>
+                            <input
+                                type="text"
+                                class="form-control {% if contact_form.first_name.errors %}is-invalid{% endif %}"
+                                id="first_name"
+                                name="first_name"
+                                placeholder="Enter your first name"
+                                value="{% if contact_form.is_bound %}{{ contact_form.first_name.value|default:'' }}{% endif %}"
+                                required
+                                minlength="2"
+                                maxlength="50"
+                            >
+                            {% for error in contact_form.first_name.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="last_name" class="form-label fw-semibold">Last name</label>
+                            <input
+                                type="text"
+                                class="form-control {% if contact_form.last_name.errors %}is-invalid{% endif %}"
+                                id="last_name"
+                                name="last_name"
+                                placeholder="Enter your last name"
+                                value="{% if contact_form.is_bound %}{{ contact_form.last_name.value|default:'' }}{% endif %}"
+                                required
+                                minlength="2"
+                                maxlength="50"
+                            >
+                            {% for error in contact_form.last_name.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-12">
+                            <label for="email" class="form-label fw-semibold">Email address</label>
+                            <input
+                                type="email"
+                                class="form-control {% if contact_form.email.errors %}is-invalid{% endif %}"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                value="{% if contact_form.is_bound %}{{ contact_form.email.value|default:'' }}{% endif %}"
+                                required
+                                maxlength="254"
+                            >
+                            {% for error in contact_form.email.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-12">
+                            <label for="message" class="form-label fw-semibold">Message</label>
+                            <textarea
+                                class="form-control {% if contact_form.message.errors %}is-invalid{% endif %}"
+                                id="message"
+                                name="message"
+                                rows="7"
+                                placeholder="Write your message here..."
+                                required
+                                minlength="10"
+                                maxlength="2000"
+                            >{% if contact_form.is_bound %}{{ contact_form.message.value|default:'' }}{% endif %}</textarea>
+                            {% for error in contact_form.message.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-brand w-100">
+                                Send Message
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

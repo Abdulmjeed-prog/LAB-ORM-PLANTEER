@@ -1,0 +1,58 @@
+{% extends "main/base.html" %}
+
+{% block title %}Contact Messages | Planteer{% endblock %}
+
+{% block content %}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="section-heading mb-5">
+            <span class="eyebrow">Inbox</span>
+            <h1>Contact Us Messages</h1>
+            <p>
+                Review messages sent from the contact page and stay on top of user questions, feedback, and support requests.
+            </p>
+        </div>
+
+        <div class="page-card">
+            {% if messages %}
+                <div class="d-flex flex-column gap-4">
+                    {% for message in messages %}
+                        <article class="message-card">
+                            <div class="message-card-top">
+                                <div>
+                                    <h3 class="message-sender mb-1">
+                                        {{ message.first_name }} {{ message.last_name }}
+                                    </h3>
+                                    <a href="mailto:{{ message.email }}" class="message-email">
+                                        {{ message.email }}
+                                    </a>
+                                </div>
+
+                                <div class="message-date">
+                                    {{ message.created_at|date:"d M Y, h:i A" }}
+                                </div>
+                            </div>
+
+                            <div class="message-body">
+                                <p class="message-full mb-0">
+                                    {{ message.message|linebreaksbr }}
+                                </p>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="search-empty-state mt-0">
+                    <div class="search-empty-icon">✉️</div>
+                    <h3>No messages yet</h3>
+                    <p>
+                        When visitors send messages from the contact page, they will appear here.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

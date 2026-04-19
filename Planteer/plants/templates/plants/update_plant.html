@@ -1,0 +1,165 @@
+{% extends "main/base.html" %}
+
+{% block title %}Update Plant | Planteer{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold text-success">Update Plant</h2>
+                        <p class="text-muted mb-0">Edit the plant information below.</p>
+                    </div>
+
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% if plant_form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in plant_form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label fw-semibold">Plant Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                class="form-control {% if plant_form.name.errors %}is-invalid{% endif %}"
+                                value="{% if plant_form.is_bound %}{{ plant_form.name.value|default:'' }}{% else %}{{ plant.name }}{% endif %}"
+                            >
+                            {% for error in plant_form.name.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- about -->
+                        <div class="mb-3">
+                            <label for="about" class="form-label fw-semibold">About</label>
+                            <textarea
+                                name="about"
+                                id="about"
+                                rows="4"
+                                class="form-control {% if plant_form.about.errors %}is-invalid{% endif %}"
+                            >{% if plant_form.is_bound %}{{ plant_form.about.value|default:'' }}{% else %}{{ plant.about }}{% endif %}</textarea>
+                            {% for error in plant_form.about.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- used_for -->
+                        <div class="mb-3">
+                            <label for="used_for" class="form-label fw-semibold">Used For</label>
+                            <input
+                                type="text"
+                                name="used_for"
+                                id="used_for"
+                                class="form-control {% if plant_form.used_for.errors %}is-invalid{% endif %}"
+                                value="{% if plant_form.is_bound %}{{ plant_form.used_for.value|default:'' }}{% else %}{{ plant.used_for }}{% endif %}"
+                            >
+                            {% for error in plant_form.used_for.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- image -->
+                        <div class="mb-3">
+                            <label for="image" class="form-label fw-semibold">Plant Image</label>
+                            <input
+                                type="file"
+                                name="image"
+                                id="image"
+                                class="form-control {% if plant_form.image.errors %}is-invalid{% endif %}"
+                            >
+                            {% for error in plant_form.image.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        {% if plant.image %}
+                        <div class="mb-3 text-center">
+                            <p class="fw-semibold mb-2">Current Image</p>
+                            <img src="{{ plant.image.url }}" alt="{{ plant.name }}"
+                                 class="img-fluid rounded shadow-sm" style="max-height: 250px;">
+                        </div>
+                        {% endif %}
+
+                        <!-- category -->
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="category" class="form-label fw-semibold">Category</label>
+                                <select
+                                    name="category"
+                                    id="category"
+                                    class="form-select {% if plant_form.category.errors %}is-invalid{% endif %}"
+                                >
+                                    {% for val, label in categories %}
+                                        <option value="{{ val }}"
+                                            {% if plant_form.is_bound %}
+                                                {% if plant_form.category.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}
+                                            {% else %}
+                                                {% if plant.category|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}
+                                            {% endif %}
+                                        >
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                {% for error in plant_form.category.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- is_edible -->
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="is_edible" class="form-label fw-semibold">Is Edible?</label>
+                                <select
+                                    name="is_edible"
+                                    id="is_edible"
+                                    class="form-select"
+                                >
+                                    <option value="yes"
+                                            {% if plant_form.is_bound %}
+                                                {% if plant_form.is_edible.value == True %}selected{% endif %}
+                                            {% else %}
+                                                {% if plant.is_edible %}selected{% endif %}
+                                            {% endif %}
+                                    >
+                                        Yes
+                                    </option>
+                                    <option value="no"
+                                            {% if plant_form.is_bound %}
+                                                {% if plant_form.is_edible.value == False %}selected{% endif %}
+                                            {% else %}
+                                                {% if not plant.is_edible %}selected{% endif %}
+                                            {% endif %}
+                                    >
+                                        No
+                                    </option>
+                                </select>
+                                {% for error in plant_form.is_edible.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column flex-md-row gap-3 mt-4">
+                            <button type="submit" class="btn btn-green flex-fill">Update Plant</button>
+                            <a href="{% url 'plants:details_view' plant.id %}"
+                               class="btn btn-outline-secondary flex-fill">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
