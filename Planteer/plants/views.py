@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from .models import Plant
+from .models import Comment
 from .forms import PlantForm
+from .forms import CommentForm
 from django.db.models import Q
 # Create your views here.
 
@@ -27,7 +29,24 @@ def details_view(request:HttpRequest, plant_id):
     recom_plants = Plant.objects.filter(category = plant.category)
     recom_plants = recom_plants.exclude(pk = plant_id)
     recom_plants = recom_plants.order_by('?')[:3]
-    return render(request,'plants/details.html', {'plant': plant, 'recom_plants': recom_plants})
+    comments = Comment.objects.filter(plant_id=plant).order_by('-create_at')
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            form = comment_form.save(commit=False)
+            form.plant_id = plant
+            form.save()
+        else:
+            return render(request, 'plants/details.html', {
+                'plant': plant,
+                'recom_plants': recom_plants,
+                'comments': comments,
+                'comment_form': comment_form
+            })
+
+            
+    return render(request,'plants/details.html', {'plant': plant, 'recom_plants': recom_plants,'comments': comments})
 
 def add_plant(request:HttpRequest):
     

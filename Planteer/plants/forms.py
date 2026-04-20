@@ -1,5 +1,6 @@
 from django import forms
 from plants.models import Plant
+from plants.models import Comment
 
 
 class PlantForm(forms.ModelForm):
@@ -61,3 +62,8 @@ class PlantForm(forms.ModelForm):
     class Meta:
         model = Plant
         fields = ['name', 'about', 'used_for', 'image', 'category', 'is_edible']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['plant_id','name','content']
