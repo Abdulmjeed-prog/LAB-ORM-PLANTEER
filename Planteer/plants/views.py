@@ -38,13 +38,7 @@ def details_view(request:HttpRequest, plant_id):
             form.plant_id = plant
             form.save()
         else:
-            return render(request, 'plants/details.html', {
-                'plant': plant,
-                'recom_plants': recom_plants,
-                'comments': comments,
-                'comment_form': comment_form
-            })
-
+            print(comment_form.errors)
             
     return render(request,'plants/details.html', {'plant': plant, 'recom_plants': recom_plants,'comments': comments})
 
