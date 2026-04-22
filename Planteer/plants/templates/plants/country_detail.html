@@ -1,0 +1,70 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+<section class="country-hero-section">
+    <div class="container">
+        <nav class="country-breadcrumb" aria-label="breadcrumb">
+            <a href="{% url 'plants:all_plants_view' %}">Plants</a>
+            <span>/</span>
+            <span>{{ country.name }}</span>
+        </nav>
+
+        <div class="country-hero-card">
+            <div class="country-hero-main">
+                <div class="country-hero-flag-wrap">
+                    {% if country.flag %}
+                        <img src="{{ country.flag.url }}" alt="{{ country.name }} flag" class="country-hero-flag">
+                    {% else %}
+                        <div class="country-hero-flag-placeholder">🌿</div>
+                    {% endif %}
+                </div>
+
+                <div class="country-hero-copy">
+                    <span class="country-eyebrow">Country collection</span>
+                    <h1 class="country-hero-title">{{ country.name }}</h1>
+                    <p class="country-hero-text">
+                        Explore all plants connected to {{ country.name }} in your collection.
+                    </p>
+                </div>
+            </div>
+
+            <div class="country-stats-grid">
+                <div class="country-stat-card">
+                    <span class="country-stat-label">Total plants</span>
+                    <strong class="country-stat-value">{{ plants|length }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding pt-2">
+    <div class="container">
+        {% if plants %}
+            <div class="section-heading text-start mb-4">
+                <span class="eyebrow">Plant directory</span>
+                <h2>Plants in {{ country.name }}</h2>
+                <p>Browse the full list of plants linked to this country.</p>
+            </div>
+            <div class="row g-4">
+            {% include "plants/plant_cards.html" %}
+            </div>
+        {% else %}
+            <div class="country-empty-state">
+                <div class="country-empty-icon">🌱</div>
+                <span class="eyebrow mb-3 d-inline-block">No plants found</span>
+                <h3 class="display-font mb-3">No plants linked to {{ country.name }}</h3>
+                <p class="text-muted mb-4">
+                    This country does not have any plants in your collection yet. You can add a new plant or go back to explore all plants.
+                </p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a href="{% url 'plants:add_plant' %}" class="btn btn-brand">Add New Plant</a>
+                    <a href="{% url 'plants:all_plants_view' %}" class="btn btn-outline-soft">Back to All Plants</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

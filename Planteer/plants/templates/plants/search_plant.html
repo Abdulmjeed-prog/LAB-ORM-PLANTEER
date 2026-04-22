@@ -7,7 +7,7 @@
 <section class="section-padding">
     <div class="container">
         <div class="page-card search-page-card">
-            <div class="section-heading mb-4">
+            <div class="section-heading text-center mb-4">
                 <span class="eyebrow">Plant finder</span>
                 <h2>Search Plants</h2>
                 <p>
@@ -45,34 +45,44 @@
 
                 {% if plants %}
                     <div class="row g-4 mt-1">
-                        {% for plant in plants %}
-                            <div class="col-12 col-md-6 col-xl-4">
-                                <article class="plant-card plant-search-card h-100">
-                                    {% if plant.image %}
-                                        <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+                {% for plant in plants %}
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <article class="plant-card">
+                            {% if plant.image %}
+                                <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+                            {% else %}
+                                <img
+                                    src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=1200&q=80"
+                                    alt="Plant placeholder"
+                                >
+                            {% endif %}
+
+                            <div class="plant-card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                                    <span class="badge-soft">{{ plant.get_category_display }}</span>
+
+                                    {% if plant.is_edible %}
+                                        <span class="badge-soft">Edible</span>
                                     {% else %}
-                                        <img
-                                            src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=1200&q=80"
-                                            alt="Plant placeholder"
-                                        >
+                                        <span class="badge-soft">Not edible</span>
                                     {% endif %}
+                                </div>
 
-                                    <div class="plant-card-body plant-search-card-body">
-                                        <span class="badge-soft mb-3">{{ plant.get_category_display }}</span>
+                                <h3 class="plant-card-title">{{ plant.name }}</h3>
 
-                                        <h3 class="plant-card-title mb-2">{{ plant.name }}</h3>
+                                <p class="plant-card-text">
+                                    {{ plant.about|truncatewords:18 }}
+                                </p>
+                                
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="{% url 'plants:details_view' plant.id %}" class="btn btn-brand">View Details</a>
+                                    <a href="{% url 'plants:update_plant' plant.id %}" class="btn btn-outline-soft">Edit</a>
 
-                                        <p class="plant-card-text mb-4">
-                                            {{ plant.about|truncatewords:18 }}
-                                        </p>
-
-                                        <a href="{% url 'plants:details_view' plant.id %}" class="btn btn-brand w-100 mt-auto">
-                                            View Details
-                                        </a>
-                                    </div>
-                                </article>
+                                </div>
                             </div>
-                        {% endfor %}
+                        </article>
+                    </div>
+                {% endfor %}
                     </div>
                 {% else %}
                     <div class="search-empty-state">
