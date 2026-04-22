@@ -24,7 +24,7 @@ def all_plants_view(request: HttpRequest):
             plants = plants.filter(category=category)
 
         if selected_countries:
-            plants = plants.filter(countries__id__in=selected_countries)
+            plants = plants.filter(countries__id__in=selected_countries).distinct()
         if edible == 'yes':
             plants = plants.filter(is_edible=True)
         elif edible == 'no':
