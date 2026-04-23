@@ -71,18 +71,16 @@
                 </div>
             </form>
 
-            {% if request.POST.category != "All Categories" or request.POST.edible %}
+            {% if request.POST.category != "All Categories" or request.POST.edible or selected_country_objects %}
                 <div class="d-flex flex-wrap gap-2 mt-4">
                     {% if request.POST.category and request.POST.category != "All Categories" %}
                         <span class="badge-soft">Category: {{ request.POST.category }}</span>
                     {% endif %}
 
-                    {% for country in request.POST.countries  %}
-                        {% if country.id in selected_countries %}
-                            <span class="badge-soft">Countries: {{country}} </span>
-                        {% else %}
-                        {% endif %}
+                    {% for country in selected_country_objects %}
+                        <span class="badge-soft">Country: {{ country.name }}</span>
                     {% endfor %}
+
 
                     {% if request.POST.edible == "yes" %}
                         <span class="badge-soft">Edible only</span>

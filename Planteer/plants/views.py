@@ -10,15 +10,17 @@ from django.db.models import Q
 def all_plants_view(request: HttpRequest):
     plants = Plant.objects.all()
     categories = Plant.objects.values_list('category', flat=True).distinct()
-    countries = Country.objects.all()
+    countries = Country.objects.all().order_by('name')
     selected_countries = []
     category = 'All Categories'
     edible = ''
+    selected_country_objects = []
 
     if request.method == 'POST':
         category = request.POST.get('category', 'All Categories')
         edible = request.POST.get('edible', '')
         selected_countries = request.POST.getlist('countries')
+        selected_country_objects = Country.objects.filter(id__in=selected_countries)
 
         if category != 'All Categories':
             plants = plants.filter(category=category)
@@ -37,6 +39,7 @@ def all_plants_view(request: HttpRequest):
         'selected_countries': selected_countries,
         'selected_category': category,
         'selected_edible': edible,
+        'selected_country_objects': selected_country_objects
     })
 
 def details_view(request:HttpRequest, plant_id):
@@ -61,7 +64,7 @@ def details_view(request:HttpRequest, plant_id):
     return render(request,'plants/details.html', {'selected_plant': plant, 'plants': recom_plants,'comments': comments})
 
 def add_plant(request:HttpRequest):
-    countries = Country.objects.all()
+    countries = Country.objects.all().order_by('name')
     if request.method == 'POST':
 
         plant_form = PlantForm(request.POST, request.FILES)
@@ -79,7 +82,7 @@ def add_plant(request:HttpRequest):
 
 def update_plant(request: HttpRequest, plant_id):
     plant = Plant.objects.get(pk=plant_id)
-    countries = Country.objects.all()
+    countries = Country.objects.all().order_by('name')
     if request.method == 'POST':
         plant_form = PlantForm(request.POST, request.FILES, instance=plant)
         selected_country_ids = request.POST.getlist('countries')
