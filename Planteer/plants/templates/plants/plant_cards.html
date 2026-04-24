@@ -1,38 +1,51 @@
-                {% for plant in plants %}
-                    <div class="col-12 col-md-6 col-xl-4">
-                        <article class="plant-card">
-                            {% if plant.image %}
-                                <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
-                            {% else %}
-                                <img
-                                    src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=1200&q=80"
-                                    alt="Plant placeholder"
-                                >
-                            {% endif %}
+{% for plant in plants %}
+    <div class="col-12 col-md-6 col-xl-4">
+        <article class="plant-card">
+            {% if plant.image %}
+                <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+            {% else %}
+                <img
+                    src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=1200&q=80"
+                    alt="Plant placeholder"
+                >
+            {% endif %}
 
-                            <div class="plant-card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                                    <span class="badge-soft">{{ plant.get_category_display }}</span>
+            <div class="plant-card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <span class="badge-soft">{{ plant.get_category_display }}</span>
 
-                                    {% if plant.is_edible %}
-                                        <span class="badge-soft">Edible</span>
-                                    {% else %}
-                                        <span class="badge-soft">Not edible</span>
-                                    {% endif %}
-                                </div>
+                    {% if plant.is_edible %}
+                        <span class="badge-soft">Edible</span>
+                    {% else %}
+                        <span class="badge-soft">Not edible</span>
+                    {% endif %}
+                </div>
 
-                                <h3 class="plant-card-title">{{ plant.name }}</h3>
+                <h3 class="plant-card-title">{{ plant.name }}</h3>
 
-                                <p class="plant-card-text">
-                                    {{ plant.about|truncatewords:18 }}
-                                </p>
-                                
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <a href="{% url 'plants:details_view' plant.id %}" class="btn btn-brand">View Details</a>
-                                    <a href="{% url 'plants:update_plant' plant.id %}" class="btn btn-outline-soft">Edit</a>
+                <p class="plant-card-text">
+                    {{ plant.about|truncatewords:18 }}
+                </p>
 
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                {% endfor %}
+                <div class="plant-card-footer-meta">
+                    {% if plant.comments_count %}
+                        <span class="comments-count-chip">
+                            <span class="comments-count-icon">💬</span>
+                            {{ plant.comments_count }} comment{{ plant.comments_count|pluralize }}
+                        </span>
+                    {% else %}
+                        <span class="comments-count-chip comments-count-chip-empty">
+                            <span class="comments-count-icon">💬</span>
+                            No comments yet
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap mt-3">
+                    <a href="{% url 'plants:details_view' plant.id %}" class="btn btn-brand">View Details</a>
+                    <a href="{% url 'plants:update_plant' plant.id %}" class="btn btn-outline-soft">Edit</a>
+                </div>
+            </div>
+        </article>
+    </div>
+{% endfor %}

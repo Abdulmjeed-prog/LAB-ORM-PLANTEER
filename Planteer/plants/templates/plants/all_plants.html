@@ -34,27 +34,30 @@
                     </select>
                 </div>
 
-                            <div class="col-12 mb-3">
-                                <label class="form-label fw-semibold d-block mb-3">Countries</label>
+                <div class="col-12 mb-3">
+                    <label class="form-label fw-semibold d-block mb-3">Countries</label>
 
-                                <div class="country-checkbox-grid">
-                                    {% for country in countries %}
-                                        <label class="country-check-card" for="country_{{ country.id }}">
-                                            <input
-                                                type="checkbox"
-                                                name="countries"
-                                                value="{{ country.id }}"
-                                                id="country_{{ country.id }}"
-                                                class="country-check-input"
-                                                {% if country.id|stringformat:"s" in selected_countries %}checked{% endif %}
-                                            >
-                                            <span class="country-check-box"></span>
-                                            <span class="country-check-text">{{ country.name }}</span>
-                                        </label>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                <div class="col-12 col-lg-4">
+                    <div class="country-slider-wrap">
+                        <div class="country-slider-track">
+                            {% for country in countries %}
+                                <label class="country-check-card country-check-card-slide" for="country_{{ country.id }}">
+                                    <input
+                                        type="checkbox"
+                                        name="countries"
+                                        value="{{ country.id }}"
+                                        id="country_{{ country.id }}"
+                                        class="country-check-input"
+                                        {% if country.id|stringformat:"s" in selected_countries %}checked{% endif %}
+                                    >
+                                    <span class="country-check-box"></span>
+                                    <span class="country-check-text">{{ country.name }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <small class="text-muted d-inline-block mt-2">Swipe or scroll horizontally to see more countries.</small>
+                </div>                <div class="col-12 col-lg-4">
                     <label for="edible" class="form-label fw-semibold">Edible Status</label>
                     <select name="edible" id="edible" class="form-select">
                         <option value="">All Plants</option>
@@ -115,4 +118,53 @@
     </div>
 </section>
 
+{% if plants.has_other_pages %}
+<section class="pb-5">
+    <div class="container">
+        <nav aria-label="Plants pagination">
+            <div class="plants-pagination-wrap">
+                <div class="plants-pagination-info">
+                    Page {{ plants.number }} of {{ plants.paginator.num_pages }}
+                </div>
+
+                <ul class="pagination plants-pagination mb-0">
+                    {% if plants.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ plants.previous_page_number }}">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                    {% endif %}
+
+                    {% for num in plants.paginator.page_range %}
+                        {% if num >= plants.number|add:'-2' and num <= plants.number|add:'2' %}
+                            {% if plants.number == num %}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if plants.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ plants.next_page_number }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </div>
+</section>
+{% endif %}
 {% endblock %}
