@@ -40,9 +40,51 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/contact/">Contact</a>
                     </li>
+
+                    <li class="nav-item dropdown ms-lg-2">
+                        <button
+                            class="btn plant-dropdown-toggle dropdown-toggle"
+                            type="button"
+                            id="accountDropdown"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Account
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end plant-dropdown-menu" aria-labelledby="accountDropdown">
+                            {% if user.is_authenticated %}
+                                <li>
+                                    <span class="dropdown-user-text">
+                                        Hi, {{ user.username }}
+                                    </span>
+                                </li>
+                                <li>
+                                    <form method="post" action="{% url 'account:logout_view' %}" class="m-0">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item plant-dropdown-item plant-dropdown-danger">
+                                            Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a class="dropdown-item plant-dropdown-item" href="{% url 'account:login_view' %}">
+                                        Login
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item plant-dropdown-item" href="{% url 'account:sign_up' %}">
+                                        Sign Up
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    {% if request.user.is_superuser %}
                     <li class="nav-item ms-lg-2">
                         <a class="btn btn-brand" href="{% url 'plants:add_plant' %}">Add Plant</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

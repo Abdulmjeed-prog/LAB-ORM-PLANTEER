@@ -1,0 +1,103 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<section class="signup-section py-5">
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100 py-4">
+            <div class="col-lg-10 col-xl-9">
+                <div class="signup-card shadow-sm overflow-hidden">
+                    <div class="row g-0">
+                        
+                        <div class="col-lg-5 signup-aside d-none d-lg-flex">
+                            <div class="signup-aside-content">
+                                <span class="signup-badge">Join Planteer</span>
+                                <h1>Create your account</h1>
+                                <p>
+                                    Save your details, explore plants, and become part of a calm green space built for plant lovers.
+                                </p>
+
+                                <ul class="signup-points">
+                                    <li>Explore plant collections</li>
+                                    <li>Add and manage plants</li>
+                                    <li>Enjoy a clean and simple experience</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-7">
+                            <div class="signup-form-wrap">
+                                <div class="mb-4">
+                                    <h2 class="signup-title">Sign Up</h2>
+                                    <p class="signup-subtitle mb-0">Create your Planteer account in a few simple steps.</p>
+                                </div>
+
+                                <form action="" method="post" class="row g-3">
+                                    {% csrf_token %}
+
+                                    <div class="col-md-6">
+                                        <label for="first_name" class="form-label">First Name</label>
+                                        <input type="text" class="form-control signup-input" id="first_name" name="first_name" placeholder="Enter your first name" required>
+                                        {% for error in user_form.first_name.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="last_name" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control signup-input" id="last_name" name="last_name" placeholder="Enter your last name" required>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" class="form-control signup-input" id="username" name="username" placeholder="Choose a username">
+                                        {% for error in user_form.username.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control signup-input" id="email" name="email" placeholder="Enter your email" required>
+                                        {% for error in user_form.email.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control signup-input" id="password" name="password1" placeholder="Enter your password" required>
+                                        {% for error in user_form.password1.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                        <div class="col-12">
+                                        <label for="password" class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control signup-input" id="password" name="password2" placeholder="Enter your password" required>
+                                        {% for error in user_form.password2.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+
+
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-brand w-100 signup-btn">Create Account</button>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <p class="signup-footer-text mb-0 text-center">
+                                            Already have an account?
+                                            <a href="#">Sign in</a>
+                                        </p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

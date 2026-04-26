@@ -43,7 +43,9 @@
 
                 <div class="d-flex gap-2 flex-wrap mt-3">
                     <a href="{% url 'plants:details_view' plant.id %}" class="btn btn-brand">View Details</a>
+                    {% if request.user.is_superuser %}
                     <a href="{% url 'plants:update_plant' plant.id %}" class="btn btn-outline-soft">Edit</a>
+                    {% endif %}  
                 </div>
             </div>
         </article>
