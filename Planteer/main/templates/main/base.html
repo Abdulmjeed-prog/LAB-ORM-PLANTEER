@@ -59,7 +59,7 @@
                                     </span>
                                 </li>
                                 <li>
-                                    <form method="post" action="{% url 'account:logout_view' %}" class="m-0">
+                                    <form method="post" action="{% url 'account:logout_view' %}?next={{request.path}}" class="m-0">
                                         {% csrf_token %}
                                         <button type="submit" class="dropdown-item plant-dropdown-item plant-dropdown-danger">
                                             Logout

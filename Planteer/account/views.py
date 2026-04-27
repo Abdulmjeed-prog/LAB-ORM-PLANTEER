@@ -42,5 +42,6 @@ def login_view(request:HttpRequest):
 
 def logout_view(request:HttpRequest):
     logout(request)
-    return redirect('/')
+    response = redirect(request.GET.get("next"))
+    return response
     
