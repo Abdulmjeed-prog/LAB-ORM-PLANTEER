@@ -31,7 +31,7 @@
                                     <p class="signup-subtitle mb-0">Create your Planteer account in a few simple steps.</p>
                                 </div>
 
-                                <form action="" method="post" class="row g-3">
+                                <form action="" enctype="multipart/form-data" method="post" class="row g-3">
                                     {% csrf_token %}
 
                                     <div class="col-md-6">
@@ -79,7 +79,15 @@
                                         {% endfor %}
                                     </div>
 
+                                    <div class="col-12">
+                                        <label for="" class="form-label">About You</label>
+                                        <textarea name="about" class="form-control" id=""></textarea>
+                                    </div>
 
+                                    <div>
+                                        <label for="" class="form-label">Upload Your Avatar</label>
+                                        <input type="file" name="avatar" class="form-control">
+                                    </div>
                                     <div class="col-12">
                                         <button type="submit" class="btn btn-brand w-100 signup-btn">Create Account</button>
                                     </div>

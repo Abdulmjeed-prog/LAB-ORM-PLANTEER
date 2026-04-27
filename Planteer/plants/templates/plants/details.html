@@ -121,7 +121,7 @@
                                 <article class="comment-card">
                                     <div class="comment-head">
                                         <div>
-                                            <h3 class="comment-name mb-1">{{ comment.user.username }}</h3>
+                                            <a href="{% url 'account:profile_view' comment.user.username %}"><h3 class="comment-name mb-1">{{ comment.user.username }}</h3></a>
                                             <p class="comment-date mb-0 text-muted">
                                                 {{ comment.create_at|date:"d M Y, h:i A" }}
                                             </p>
